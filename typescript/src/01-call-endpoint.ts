@@ -1,13 +1,14 @@
 /**
  * 01-call-endpoint.ts
  *
- * Calls Hermes Plant's DealAnalyzer endpoint (DCF/IRR) using `x402-fetch`.
- * `x402-fetch` is a drop-in replacement for the global `fetch` that handles
- * the 402 → sign → retry handshake automatically.
+ * Calls Hermes Plant's DealAnalyzer endpoint using x402-enabled fetch.
+ * The x402 wrapper is a drop-in replacement for global fetch that handles
+ * the 402 -> sign -> retry handshake automatically.
  *
  *   WALLET_PRIVATE_KEY=0x... npm run example:call
  */
-import { createX402Fetch } from "@x402/fetch";
+import { wrapFetchWithPayment, x402Client } from "@x402/fetch";
+import { ExactEvmScheme, toClientEvmSigner } from "@x402/evm";
 import { privateKeyToAccount } from "viem/accounts";
 
 const BASE = process.env.HERMES_BASE_URL ?? "https://hermesplant.com";
@@ -20,11 +21,13 @@ if (!pk) {
 }
 
 const account = privateKeyToAccount(pk);
+const signer = toClientEvmSigner(account);
+const client = new x402Client().register("eip155:8453", new ExactEvmScheme(signer));
 
-// x402-fetch wraps the native fetch — when the server returns 402, it
-// inspects the PAYMENT-REQUIRED header, signs the appropriate
-// PaymentRequirements with `account`, and retries with PAYMENT-SIGNATURE.
-const fetch402 = createX402Fetch({ account });
+// x402 fetch wraps the native fetch. When the server returns 402, it inspects
+// the payment requirements, signs the authorization with the local account,
+// and retries with the payment header.
+const fetch402 = wrapFetchWithPayment(fetch, client);
 
 async function main() {
   const response = await fetch402(`${BASE}${ENDPOINT}`, {

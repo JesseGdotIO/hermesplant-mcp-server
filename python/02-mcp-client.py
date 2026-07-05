@@ -1,8 +1,8 @@
 """
 02-mcp-client.py
 
-Connect to Hermes Plant's Streamable-HTTP MCP endpoint, list tools, and call
-a free one. Paid tools still require an x402 wallet — see 01-call-endpoint.py
+Connect to Hermes Plant's Streamable HTTP MCP endpoint, list tools, and call
+a free one. Paid tools still require an x402 wallet; see 01-call-endpoint.py
 for the payment flow.
 """
 import asyncio

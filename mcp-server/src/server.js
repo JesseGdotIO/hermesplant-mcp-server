@@ -15,36 +15,51 @@ const baseUrl = (process.env.HERMES_BASE_URL ?? DEFAULT_BASE_URL).replace(/\/$/,
 const hostedMcpUrl = process.env.HERMES_MCP_URL ?? DEFAULT_MCP_URL;
 
 const tools = [
-  {
+  discoveryTool({
     name: "hermesplant_x402_manifest",
-    description:
-      "Fetch the live Hermes Plant x402 discovery manifest, including network, facilitator, and payment metadata.",
-    inputSchema: emptyInputSchema(),
-  },
-  {
+    title: "Get x402 payment manifest",
+    description: [
+      "Fetches Hermes Plant's live x402 manifest from /.well-known/x402.",
+      "Use this before paid API or MCP calls to discover the active network, USDC asset, facilitator URL, payTo address, endpoint prices, and payment-policy metadata.",
+      "This read-only tool returns raw JSON text and never signs payments, approves wallet transactions, calls paid endpoints, or spends funds.",
+    ].join(" "),
+  }),
+  discoveryTool({
     name: "hermesplant_llms_catalog",
-    description:
-      "Fetch Hermes Plant's llms.txt catalog for agent-readable endpoint and usage context.",
-    inputSchema: emptyInputSchema(),
-  },
-  {
+    title: "Get llms.txt catalog",
+    description: [
+      "Fetches Hermes Plant's /llms.txt catalog for agent-readable onboarding context.",
+      "Use this to understand the available deterministic finance, quant, safety, and payment-policy services before selecting an endpoint.",
+      "This read-only tool returns plain text documentation and does not execute paid work.",
+    ].join(" "),
+  }),
+  discoveryTool({
     name: "hermesplant_api_catalog",
-    description:
-      "Fetch Hermes Plant's RFC 9727-style API catalog for machine-readable service discovery.",
-    inputSchema: emptyInputSchema(),
-  },
-  {
+    title: "Get API catalog",
+    description: [
+      "Fetches Hermes Plant's RFC 9727-style API catalog from /.well-known/api-catalog.",
+      "Use this when a client needs machine-readable service discovery, OpenAPI links, MCP metadata links, pricing metadata, and provider contact details.",
+      "This read-only tool returns raw JSON text and performs no paid API calls.",
+    ].join(" "),
+  }),
+  discoveryTool({
     name: "hermesplant_mcp_server_card",
-    description:
-      "Fetch Hermes Plant's MCP server descriptor for the hosted Streamable HTTP endpoint.",
-    inputSchema: emptyInputSchema(),
-  },
-  {
+    title: "Get hosted MCP server card",
+    description: [
+      "Fetches Hermes Plant's MCP server descriptor from /.well-known/mcp/server-card.json.",
+      "Use this to discover the hosted Streamable HTTP MCP endpoint, advertised capabilities, pricing policy, and integration metadata.",
+      "This read-only tool returns raw JSON text and does not connect to a wallet or spend funds.",
+    ].join(" "),
+  }),
+  discoveryTool({
     name: "hermesplant_list_hosted_tools",
-    description:
-      "Connect to the hosted Hermes Plant MCP endpoint and list its advertised tools. Paid tool calls still require an x402-capable runtime and wallet approval.",
-    inputSchema: emptyInputSchema(),
-  },
+    title: "List hosted Hermes Plant tools",
+    description: [
+      "Connects to Hermes Plant's hosted Streamable HTTP MCP endpoint and lists the tools it advertises.",
+      "Use this to inspect tool names, descriptions, and input schemas before wiring an x402-capable runtime.",
+      "This read-only introspection call does not invoke paid tools, sign wallet messages, approve payments, or spend USDC.",
+    ].join(" "),
+  }),
 ];
 
 const server = new Server(
@@ -103,6 +118,21 @@ function emptyInputSchema() {
     type: "object",
     properties: {},
     additionalProperties: false,
+  };
+}
+
+function discoveryTool({ name, title, description }) {
+  return {
+    name,
+    description,
+    inputSchema: emptyInputSchema(),
+    annotations: {
+      title,
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: true,
+    },
   };
 }
 

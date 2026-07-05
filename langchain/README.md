@@ -1,4 +1,4 @@
-# LangChain — Hermes Plant tool
+# LangChain - Hermes Plant tool
 
 A LangChain `BaseTool` that wraps a Hermes Plant x402-paid endpoint. Drop into any LangChain or LangGraph agent.
 
@@ -33,4 +33,4 @@ llm = ChatOpenAI(model="gpt-4o-mini")
 agent = create_react_agent(llm, tools)
 ```
 
-The tool description is intentionally specific so the LLM picks it for cashflow-IRR-NPV questions and *doesn't* try to invent the math itself. Copy the pattern for other Hermes endpoints (`/agent-services/options`, `/agent-services/walletguard`, etc.) — same shape, different schema.
+The tool description is intentionally specific so the LLM picks it for cashflow-IRR-NPV questions and does not try to invent the math itself. Copy the pattern for other Hermes endpoints (`/agent-services/options`, `/agent-services/walletguard`, etc.): same shape, different schema.

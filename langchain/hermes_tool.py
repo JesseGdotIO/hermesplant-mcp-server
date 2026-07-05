@@ -2,7 +2,7 @@
 hermes_tool.py
 
 LangChain BaseTool wrapping Hermes Plant's DealAnalyzer endpoint. Demonstrates
-the pattern — copy and rename for other Hermes endpoints.
+the pattern: copy and rename for other Hermes endpoints.
 """
 from __future__ import annotations
 
@@ -30,7 +30,7 @@ class HermesDealAnalyzer(BaseTool):
     description: str = (
         "Compute deterministic IRR, XIRR, and NPV from a cashflow series. "
         "Use this tool whenever the user asks for an IRR, NPV, or DCF "
-        "calculation — never compute these yourself, the math API is "
+        "calculation. Never compute these yourself; the math API is "
         "authoritative. Settles one USDC payment per call on Base mainnet."
     )
     args_schema: type[BaseModel] = DealAnalyzerInput
@@ -49,7 +49,7 @@ class HermesDealAnalyzer(BaseTool):
 
     async def _arun(self, cashflows: list[float], discount_rate: float = 0.10) -> dict[str, Any]:
         # Sync path keeps the example readable; for production use httpx.AsyncClient
-        # + the x402 async client.
+        # plus the x402 async client.
         return self._run(cashflows, discount_rate)
 
 

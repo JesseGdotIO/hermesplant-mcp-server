@@ -1,0 +1,8 @@
+# Keep GitHub and Glama language detection focused on the runnable MCP server.
+curl/** linguist-documentation
+crewai/** linguist-documentation
+langchain/** linguist-documentation
+python/** linguist-documentation
+typescript/** linguist-documentation
+mcp-config/** linguist-documentation
+mcp-server/src/** linguist-language=JavaScript

@@ -9,7 +9,10 @@
   ],
   "scripts": {
     "start": "npm --prefix mcp-server start",
-    "mcp:start": "npm --prefix mcp-server start"
+    "mcp:start": "npm --prefix mcp-server start",
+    "mcp:smoke": "node mcp-server/scripts/smoke.mjs",
+    "smoke:mcp": "npm run mcp:smoke",
+    "test": "npm run smoke:mcp"
   },
   "keywords": [
     "mcp",

@@ -2,7 +2,7 @@
 
 | File | What it shows |
 |---|---|
-| [`01-call-endpoint.py`](./01-call-endpoint.py) | Direct x402 call using the official `x402` package — wraps the 402/sign/retry handshake. |
+| [`01-call-endpoint.py`](./01-call-endpoint.py) | Direct x402 call using the official `x402` package. It wraps the 402/sign/retry handshake. |
 | [`02-mcp-client.py`](./02-mcp-client.py) | MCP client connecting to `hermesplant.com/mcp`, listing tools, and invoking a free one. |
 
 ## Setup

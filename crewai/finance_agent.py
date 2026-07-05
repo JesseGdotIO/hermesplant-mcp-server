@@ -8,7 +8,7 @@ Two CrewAI agents:
 
 The tool wraps a Hermes Plant x402-paid endpoint. Every tool call settles
 one USDC payment on Base mainnet. Pricing is bounded by the endpoint's
-fixed price — not token count.
+fixed price, not token count.
 """
 from __future__ import annotations
 
@@ -62,7 +62,7 @@ def build_crew() -> Crew:
         role="Investment analyst",
         goal=(
             "Evaluate the financial attractiveness of a candidate deal using "
-            "deterministic finance math from Hermes Plant — never guess IRR or NPV."
+            "deterministic finance math from Hermes Plant. Never guess IRR or NPV."
         ),
         backstory=(
             "You compute returns precisely. When a number can come from a calc "
