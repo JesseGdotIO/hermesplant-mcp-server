@@ -1,5 +1,7 @@
-.git
-.github
-node_modules
-mcp-server/node_modules
-npm-debug.log*
+*
+
+!mcp-server/
+!mcp-server/package.json
+!mcp-server/package-lock.json
+!mcp-server/src/
+!mcp-server/src/**
