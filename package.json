@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Runnable Hermes Plant MCP server for deterministic finance APIs paid over x402.",
+  "description": "MCP bridge for Hermes Plant action safety, spend assurance, signed evidence, and deterministic x402 APIs.",
   "workspaces": [
     "mcp-server"
   ],
@@ -19,6 +19,10 @@
     "mcp-server",
     "model-context-protocol",
     "x402",
+    "agent-security",
+    "agent-commerce",
+    "approval-workflows",
+    "signed-evidence",
     "finance",
     "ai-agents"
   ],

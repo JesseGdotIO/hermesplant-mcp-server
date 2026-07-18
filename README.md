@@ -3,7 +3,7 @@
 [![Glama score](https://glama.ai/mcp/servers/JesseGdotIO/hermesplant-mcp-server/badges/score.svg)](https://glama.ai/mcp/servers/JesseGdotIO/hermesplant-mcp-server)
 [![CI](https://github.com/JesseGdotIO/hermesplant-mcp-server/actions/workflows/lint.yml/badge.svg)](https://github.com/JesseGdotIO/hermesplant-mcp-server/actions/workflows/lint.yml)
 
-Runnable MCP server and integration examples for [Hermes Plant](https://hermesplant.com): deterministic finance and quant APIs that AI agents call and pay for per call over [x402](https://x402.org). No API keys, no shared secrets, no hallucinated math.
+Runnable MCP server and integration examples for [Hermes Plant](https://hermesplant.com), the Agent Commerce Assurance layer that lets AI agents preflight, approve, and prove consequential actions. Start with a one-cent action-safety check, route only high-risk actions into signed review evidence, and pay per call over [x402](https://x402.org).
 
 **What's here**: a runnable stdio MCP bridge for registry crawlers and local clients, plus drop-in examples in `curl`, TypeScript, Python, [CrewAI](https://www.crewai.com/), [LangChain](https://www.langchain.com/), and MCP client configs for Claude Desktop / Cline / Cursor.
 
@@ -20,9 +20,19 @@ This repo is arranged for Glama to build and inspect the MCP server without secr
 
 A Glama release is still an account-side action, not a GitHub release. After claiming the server in Glama, use the Dockerfile admin page to deploy the build, wait for the build test to pass, then publish a Glama release version. That release unlocks Glama's Server Coherence and Tool Definition Quality scoring.
 
-## What is Hermes Plant?
+## Start with an assurance workflow
 
-A hosted catalog of deterministic finance + quant endpoints AI agents call and pay for per call:
+| Workflow | Use it for | Tracked entrypoint |
+|---|---|---|
+| **Action Safety** | Preflight shell, Git, SQL, deploy, x402, and MCP actions; escalate high-risk work into review plus a signed receipt. | [Open workflow](https://hermesplant.com/agent-services/action-safety-workflow?utm_source=glama&utm_medium=registry&utm_campaign=biweekly-registry-wave&utm_content=action-safety-workflow) |
+| **Spend Assurance** | Check payment policy, wallet context, and evidence before an agent spends. | [Open workflow](https://hermesplant.com/agent-services/spend-assurance?utm_source=glama&utm_medium=registry&utm_campaign=biweekly-registry-wave&utm_content=spend-assurance-workflow) |
+| **Investment Evidence** | Run deterministic underwriting and return verifiable evidence in one paid call. | [Open workflow](https://hermesplant.com/agent-services/investment-evidence?utm_source=glama&utm_medium=registry&utm_campaign=biweekly-registry-wave&utm_content=investment-evidence-workflow) |
+
+Use the free API key for up to 250 calls/month, the **$29/month Agent API Pass** for regular volume, or per-call USDC on Base. Public proof and machine-readable contracts are available at [hermesplant.com/proof](https://hermesplant.com/proof) and [hermesplant.com/openapi.json](https://hermesplant.com/openapi.json).
+
+## Component catalog
+
+Nineteen hosted x402 endpoints remain available as composable utilities:
 
 | Endpoint | Use it for | Hosted path |
 |---|---|---|
@@ -40,7 +50,7 @@ A hosted catalog of deterministic finance + quant endpoints AI agents call and p
 | **Payment policy** | Inspect/score an x402 payment policy | [/agent-services/payment-policy](https://hermesplant.com/agent-services/payment-policy) |
 | **ReviewQueue** | Human-in-the-loop approval routing | [/agent-services/reviewqueue](https://hermesplant.com/agent-services/reviewqueue) |
 
-Agents discover endpoints through OpenAPI, llms.txt, the x402 manifest, the API catalog, MCP metadata, or agent skills. Pricing is metered per call in USDC on Base mainnet.
+Agents discover endpoints through OpenAPI, llms.txt, the x402 manifest, the API catalog, MCP metadata, or agent skills. The workflow links above carry source-specific attribution so registry traffic can be evaluated against paid calls instead of impressions.
 
 ## How an x402 call works
 
