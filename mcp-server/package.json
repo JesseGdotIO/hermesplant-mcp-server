@@ -1,6 +1,6 @@
 {
   "name": "hermesplant-mcp-server",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": true,
   "type": "module",
   "description": "Stdio MCP bridge for Hermes Plant discovery and hosted MCP tool introspection.",
