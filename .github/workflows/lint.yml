@@ -15,6 +15,7 @@ jobs:
           node-version: "22"
           cache: npm
       - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm audit --omit=dev --audit-level=high
       - run: npm run smoke:mcp
       - run: docker build -t hermesplant-mcp-server:ci .
       - run: MCP_SMOKE_DOCKER_IMAGE=hermesplant-mcp-server:ci npm run smoke:mcp

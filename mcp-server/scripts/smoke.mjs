@@ -6,6 +6,7 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const serverPath = path.resolve(__dirname, "../src/server.js");
 const dockerImage = process.env.MCP_SMOKE_DOCKER_IMAGE;
+const expectedServerVersion = "0.1.3";
 
 const expectedTools = [
   "hermesplant_x402_manifest",
@@ -39,6 +40,13 @@ const client = new Client(
 
 try {
   await client.connect(transport);
+
+  const serverVersion = client.getServerVersion()?.version;
+  if (serverVersion !== expectedServerVersion) {
+    throw new Error(
+      `Expected server version ${expectedServerVersion}, received ${serverVersion ?? "missing"}.`,
+    );
+  }
 
   const { tools } = await client.listTools();
   const actualNames = new Set(tools.map((tool) => tool.name));

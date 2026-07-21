@@ -7,6 +7,12 @@ Runnable MCP server and integration examples for [Hermes Plant](https://hermespl
 
 **What's here**: a runnable stdio MCP bridge for registry crawlers and local clients, plus drop-in examples in `curl`, TypeScript, Python, [CrewAI](https://www.crewai.com/), [LangChain](https://www.langchain.com/), and MCP client configs for Claude Desktop / Cline / Cursor.
 
+## Use the hosted MCP connector
+
+For the complete production tool surface, use the canonical [Hermes Plant — Agent Commerce Assurance connector on Glama](https://glama.ai/mcp/connectors/io.github.JesseGdotIO/hermes-plant). It exposes Action Safety, Spend Assurance, signed evidence, payment-policy checks, and the component x402 tools through the live Streamable HTTP endpoint.
+
+This repository is the portable, no-secret discovery bridge. It lets registry crawlers and local clients inspect the live catalog and payment contracts without signing a wallet message or spending funds. The hosted connector is the buyer-facing path for invoking the production tools.
+
 ## Glama registry
 
 [![Hermes Plant MCP Server Glama card](https://glama.ai/mcp/servers/JesseGdotIO/hermesplant-mcp-server/badges/card.svg)](https://glama.ai/mcp/servers/JesseGdotIO/hermesplant-mcp-server)
@@ -19,6 +25,16 @@ This repo is arranged for Glama to build and inspect the MCP server without secr
 - GitHub Actions validates the MCP server, Docker image, TypeScript examples, shell examples, and Python syntax.
 
 A Glama release is still an account-side action, not a GitHub release. After claiming the server in Glama, use the Dockerfile admin page to deploy the build, wait for the build test to pass, then publish a Glama release version. That release unlocks Glama's Server Coherence and Tool Definition Quality scoring.
+
+### Complementary MCP servers
+
+Hermes Plant governs consequential actions and payments; these independent servers cover adjacent layers of an agent stack:
+
+- [SINT Protocol](https://glama.ai/mcp/servers/sint-ai/sint-protocol) — capability authorization and policy enforcement before execution.
+- [AgentPay MCP](https://glama.ai/mcp/servers/up2itnow0822/claw-pay-mcp) — non-custodial wallet execution with spend limits and approval queues.
+- [Agent Security Scanner MCP](https://glama.ai/mcp/servers/sinewaveai/agent-security-scanner-mcp) — repository, package, prompt, and skill security scanning.
+
+These links describe functional complementarity, not partnerships or endorsements.
 
 ## Start with an assurance workflow
 

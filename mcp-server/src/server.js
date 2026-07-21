@@ -10,6 +10,7 @@ import {
 
 const DEFAULT_BASE_URL = "https://hermesplant.com";
 const DEFAULT_MCP_URL = "https://hermesplant.com/mcp";
+const SERVER_VERSION = "0.1.3";
 
 const baseUrl = (process.env.HERMES_BASE_URL ?? DEFAULT_BASE_URL).replace(/\/$/, "");
 const hostedMcpUrl = process.env.HERMES_MCP_URL ?? DEFAULT_MCP_URL;
@@ -65,7 +66,7 @@ const tools = [
 const server = new Server(
   {
     name: "hermesplant-mcp-server",
-    version: "0.1.0",
+    version: SERVER_VERSION,
   },
   {
     capabilities: {
@@ -160,7 +161,7 @@ async function fetchText(url, accept) {
 async function listHostedTools() {
   const transport = new StreamableHTTPClientTransport(new URL(hostedMcpUrl));
   const client = new Client(
-    { name: "hermesplant-mcp-server-bridge", version: "0.1.0" },
+    { name: "hermesplant-mcp-server-bridge", version: SERVER_VERSION },
     { capabilities: {} },
   );
 
