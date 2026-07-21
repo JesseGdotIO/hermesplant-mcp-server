@@ -1,6 +1,6 @@
 {
   "name": "hermesplant-mcp-server-workspace",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "type": "module",
   "description": "MCP bridge for Hermes Plant action safety, spend assurance, signed evidence, and deterministic x402 APIs.",
