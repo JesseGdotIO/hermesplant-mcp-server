@@ -10,7 +10,7 @@ import {
 
 const DEFAULT_BASE_URL = "https://hermesplant.com";
 const DEFAULT_MCP_URL = "https://hermesplant.com/mcp";
-const SERVER_VERSION = "0.1.3";
+const SERVER_VERSION = "0.1.4";
 
 const baseUrl = (process.env.HERMES_BASE_URL ?? DEFAULT_BASE_URL).replace(/\/$/, "");
 const hostedMcpUrl = process.env.HERMES_MCP_URL ?? DEFAULT_MCP_URL;

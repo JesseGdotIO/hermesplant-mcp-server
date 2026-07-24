@@ -6,7 +6,7 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const serverPath = path.resolve(__dirname, "../src/server.js");
 const dockerImage = process.env.MCP_SMOKE_DOCKER_IMAGE;
-const expectedServerVersion = "0.1.3";
+const expectedServerVersion = "0.1.4";
 
 const expectedTools = [
   "hermesplant_x402_manifest",
