@@ -2,14 +2,15 @@ from __future__ import annotations
 
 import importlib.util
 import os
-import sys
 from pathlib import Path
+import sys
 import unittest
 from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGETS = {
+    "python": ROOT / "python" / "01-call-endpoint.py",
     "langchain": ROOT / "langchain" / "hermes_tool.py",
     "crewai": ROOT / "crewai" / "finance_agent.py",
 }
@@ -29,6 +30,7 @@ def load_target(name: str):
 class FakeResponse:
     def __init__(self):
         self.raise_called = False
+        self.headers = {"PAYMENT-RESPONSE": "test-settlement"}
 
     def raise_for_status(self):
         self.raise_called = True
@@ -75,18 +77,26 @@ class FrameworkAdapterContractTests(unittest.TestCase):
                 with self.assertRaisesRegex(RuntimeError, "Paid calls are disabled"):
                     module._paid_session()
 
-    def test_tool_posts_documented_cashflowlens_shape(self):
+    def test_client_posts_documented_cashflowlens_shape(self):
         for name, module in self.modules.items():
             with self.subTest(name=name):
                 session = FakeSession()
                 context = FakeContext(session)
-                tool_class = (
-                    module.HermesCashflowLens
-                    if name == "langchain"
-                    else module.HermesCashflowLensTool
-                )
                 with patch.object(module, "_paid_session", return_value=context):
-                    result = tool_class()._run([-100.0, 120.0], 0.15, 12)
+                    if name == "python":
+                        result, settlement = module.call_cashflow_lens(
+                            [-100.0, 120.0],
+                            0.15,
+                            12,
+                        )
+                        self.assertEqual(settlement, "test-settlement")
+                    else:
+                        tool_class = (
+                            module.HermesCashflowLens
+                            if name == "langchain"
+                            else module.HermesCashflowLensTool
+                        )
+                        result = tool_class()._run([-100.0, 120.0], 0.15, 12)
 
                 self.assertEqual(result, {"ok": True})
                 self.assertTrue(session.response.raise_called)

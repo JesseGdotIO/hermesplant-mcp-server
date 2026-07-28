@@ -7,7 +7,8 @@
   "scripts": {
     "example:call": "tsx src/01-call-endpoint.ts",
     "example:mcp": "tsx src/02-mcp-client.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:clients": "tsx --test src/*.test.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",

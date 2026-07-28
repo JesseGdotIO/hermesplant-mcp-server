@@ -22,7 +22,7 @@ This repo is arranged for Glama to build and inspect the MCP server without secr
 - `glama.json` declares the GitHub maintainer.
 - The root `Dockerfile` starts the stdio MCP server in `mcp-server/`.
 - `npm run smoke:mcp` lists all local MCP tools and fetches the live x402 manifest.
-- GitHub Actions validates the MCP server, Docker image, TypeScript examples, shell examples, and Python syntax.
+- GitHub Actions validates the MCP server, Docker image, shell examples, and no-spend TypeScript/Python client contracts with their real dependencies.
 
 A Glama release is still an account-side action, not a GitHub release. After claiming the server in Glama, use the Dockerfile admin page to deploy the build, wait for the build test to pass, then publish a Glama release version. That release unlocks Glama's Server Coherence and Tool Definition Quality scoring.
 
@@ -90,7 +90,7 @@ Client                    Hermes Plant                 Facilitator
 ```
 
 1. Client makes an HTTP request.
-2. Server replies with `402 Payment Required` plus a `PAYMENT-REQUIRED` header carrying the price, network, asset, recipient, and a server-issued nonce.
+2. Server replies with `402 Payment Required` plus a `PAYMENT-REQUIRED` header carrying the price, network, asset, recipient, and timeout.
 3. Client parses the challenge, signs a USDC transfer authorization locally, and replays the request with a `PAYMENT-SIGNATURE` header.
 4. Server verifies the signature via the facilitator, runs the work, settles the payment on-chain, and returns `200 OK` with the result plus a `PAYMENT-RESPONSE` header.
 
@@ -156,13 +156,13 @@ The container starts the stdio MCP bridge in [mcp-server/](./mcp-server/), which
 
 ## Wallet setup
 
-Every paid-call example assumes:
+The guarded paid-call examples require:
 
 - A funded wallet on **Base mainnet** with chain id `8453`.
-- A small **USDC** balance for paying per-call fees. Typical calls are about `$0.01` to `$0.50`.
-- An EOA private key from a standard EVM wallet such as MetaMask, Coinbase Smart Wallet, Privy, or Dynamic. Examples read it from `WALLET_PRIVATE_KEY`.
+- Enough USDC for the selected endpoint and a small amount of ETH for gas.
+- `EVM_PRIVATE_KEY` plus the explicit opt-in `HERMES_ALLOW_PAYMENT=1`.
 
-For testing without real funds, point your client at Base **Sepolia** (`84532`) and use the testnet x402 facilitator at `https://x402.org/facilitator`. Hermes Plant supports both; its `/.well-known/x402` manifest declares the active network.
+The included CashflowLens clients cap payment requirements at **$0.20 USDC** and register only Base mainnet. Leave the opt-in unset for imports and tests. Never commit a private key. These production examples do not claim testnet support; use an x402 test resource server for testnet integration work.
 
 ## Status
 

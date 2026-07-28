@@ -1,58 +1,59 @@
 #!/usr/bin/env bash
-# Walk a full x402 handshake against a Hermes Plant paid endpoint. Shows the
-# 402 challenge, prints the headers about to be signed, signs via a tiny Node
-# helper, and replays the request with the PAYMENT-SIGNATURE header attached.
+# Inspect the live CashflowLens x402 challenge without signing or spending.
 set -euo pipefail
 
-BASE="${HERMES_BASE_URL:-https://hermesplant.com}"
-ENDPOINT="${HERMES_ENDPOINT:-/agent-services/dealanalyzer}"
+for command_name in curl jq base64; do
+  if ! command -v "$command_name" >/dev/null 2>&1; then
+    echo "Missing required command: $command_name" >&2
+    exit 2
+  fi
+done
 
-if [[ -z "${WALLET_PRIVATE_KEY:-}" ]]; then
-  echo "Set WALLET_PRIVATE_KEY to a 0x-prefixed EOA private key on Base mainnet."
-  exit 2
-fi
+BASE="${HERMES_BASE_URL:-https://hermesplant.com}"
+ENDPOINT="/api/agent-services/cashflowlens/analyze"
+EXPECTED_NETWORK="eip155:8453"
+MAX_ATOMIC_USDC=200000
 
 PAYLOAD='{
   "cashflows": [-1000000, 250000, 250000, 300000, 400000],
-  "discountRate": 0.10
+  "discountRate": 0.10,
+  "periodsPerYear": 1
 }'
 
-echo "## Step 1 - unpaid POST returns 402"
-RESP=$(curl -sS -D /tmp/hermes-headers.txt -o /tmp/hermes-body.txt -w "%{http_code}" \
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf -- "$TMP_DIR"' EXIT
+HEADERS="$TMP_DIR/headers.txt"
+BODY="$TMP_DIR/body.txt"
+
+echo "## Unpaid POST returns the x402 challenge"
+STATUS=$(curl -sS -D "$HEADERS" -o "$BODY" -w "%{http_code}" \
   -X POST "$BASE$ENDPOINT" \
   -H 'Content-Type: application/json' \
   -d "$PAYLOAD")
-echo "HTTP $RESP"
-echo "Response headers:"
-grep -iE '^(payment-required|x-payment|content-type):' /tmp/hermes-headers.txt
-echo "Body:"
-cat /tmp/hermes-body.txt
-echo
 
-if [[ "$RESP" != "402" ]]; then
-  echo "Expected 402 but got $RESP - endpoint may have changed or already paid."
+echo "HTTP $STATUS"
+if [[ "$STATUS" != "402" ]]; then
+  echo "Expected HTTP 402; refusing to continue."
+  cat "$BODY"
   exit 3
 fi
 
-# Pull the base64-encoded PAYMENT-REQUIRED challenge from the headers.
-CHALLENGE_B64=$(grep -i '^payment-required:' /tmp/hermes-headers.txt | head -1 | awk -F': ' '{print $2}' | tr -d '\r')
+CHALLENGE_B64=$(grep -i '^payment-required:' "$HEADERS" | head -1 | awk -F': ' '{print $2}' | tr -d '\r')
 if [[ -z "$CHALLENGE_B64" ]]; then
-  echo "No PAYMENT-REQUIRED header - endpoint may not be x402-protected."
+  echo "Missing PAYMENT-REQUIRED header."
   exit 4
 fi
 
-echo "## Step 2 - decoded challenge"
-CHALLENGE=$(echo "$CHALLENGE_B64" | base64 -d)
-echo "$CHALLENGE" | jq '.'
-echo
+CHALLENGE=$(printf '%s' "$CHALLENGE_B64" | base64 -d)
+printf '%s\n' "$CHALLENGE" | jq '.'
 
-echo "## Step 3 - sign EIP-712 USDC authorization (Node helper)"
-SIGNATURE=$(node ./sign.mjs "$CHALLENGE")
-echo "Signature: ${SIGNATURE:0:30}..."
-echo
+printf '%s\n' "$CHALLENGE" | jq -e \
+  --arg network "$EXPECTED_NETWORK" \
+  --argjson max "$MAX_ATOMIC_USDC" \
+  '.accepts | any(.network == $network and ((.amount | tonumber) <= $max))' \
+  >/dev/null
 
-echo "## Step 4 - replay request with PAYMENT-SIGNATURE"
-curl -sS -X POST "$BASE$ENDPOINT" \
-  -H 'Content-Type: application/json' \
-  -H "PAYMENT-SIGNATURE: $SIGNATURE" \
-  -d "$PAYLOAD" | jq '.'
+echo
+echo "Verified: at least one Base mainnet option is at or below 200000 atomic USDC."
+echo "No signature was created and no payment was made."
+echo "Use the guarded Python or TypeScript client for a paid call."

@@ -6,3 +6,4 @@ python/** linguist-documentation
 typescript/** linguist-documentation
 mcp-config/** linguist-documentation
 mcp-server/src/** linguist-language=JavaScript
+*.sh text eol=lf
