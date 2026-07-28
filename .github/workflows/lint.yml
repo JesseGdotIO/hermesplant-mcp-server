@@ -53,6 +53,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: syntax check
-        run: |
-          python -m py_compile ${{ matrix.target }}/*.py
+          cache: pip
+          cache-dependency-path: ${{ matrix.target }}/requirements.txt
+      - name: Syntax check
+        run: python -m py_compile ${{ matrix.target }}/*.py
+      - name: Install adapter dependencies
+        if: matrix.target != 'python'
+        run: python -m pip install -r ${{ matrix.target }}/requirements.txt
+      - name: Verify adapter without spending
+        if: matrix.target != 'python'
+        env:
+          FRAMEWORK_TARGET: ${{ matrix.target }}
+        run: python -m unittest tests.test_framework_adapters -v
