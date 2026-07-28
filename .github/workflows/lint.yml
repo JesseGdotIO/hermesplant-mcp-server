@@ -53,8 +53,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: pip
-          cache-dependency-path: ${{ matrix.target }}/requirements.txt
       - name: Syntax check
         run: python -m py_compile ${{ matrix.target }}/*.py
       - name: Install adapter dependencies
