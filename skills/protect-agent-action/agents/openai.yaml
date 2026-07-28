@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hermes Action Safety"
+  short_description: "Gate risky agent actions before execution"
+  default_prompt: "Use $protect-agent-action to assess this exact consequential action and fail closed until the unchanged action is permitted."

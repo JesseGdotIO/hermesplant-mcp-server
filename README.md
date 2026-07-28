@@ -7,6 +7,22 @@ Runnable MCP server and integration examples for [Hermes Plant](https://hermespl
 
 **What's here**: a runnable stdio MCP bridge for registry crawlers and local clients, plus drop-in examples in `curl`, TypeScript, Python, [CrewAI](https://www.crewai.com/), [LangChain](https://www.langchain.com/), and MCP client configs for Claude Desktop / Cline / Cursor.
 
+## Install the Action Safety skill
+
+Install the public, fail-closed Action Safety skill for Codex, Claude Code,
+Cursor, and other Agent Skills-compatible clients:
+
+```bash
+npx skills@1.5.18 add JesseGdotIO/hermesplant-mcp-server --skill protect-agent-action
+```
+
+The skill calls the one-cent quick gate before an exact consequential action,
+binds the result to that unchanged action, and escalates high or critical risk
+only when the additional $0.25 is authorized. Review triage is never treated as
+human approval and the skill never expands the caller's permissions.
+
+Source: [`skills/protect-agent-action`](./skills/protect-agent-action)
+
 ## Use the hosted MCP connector
 
 For the complete production tool surface, use the canonical [Hermes Plant — Agent Commerce Assurance connector on Glama](https://glama.ai/mcp/connectors/io.github.JesseGdotIO/hermes-plant). It exposes Action Safety, Spend Assurance, signed evidence, payment-policy checks, and the component x402 tools through the live Streamable HTTP endpoint.

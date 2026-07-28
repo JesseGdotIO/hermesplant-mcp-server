@@ -12,7 +12,8 @@
     "mcp:start": "npm --prefix mcp-server start",
     "mcp:smoke": "node mcp-server/scripts/smoke.mjs",
     "smoke:mcp": "npm run mcp:smoke",
-    "test": "npm run smoke:mcp"
+    "verify:skill": "node scripts/verify-agent-skill.mjs",
+    "test": "npm run verify:skill && npm run smoke:mcp"
   },
   "keywords": [
     "mcp",
