@@ -1,21 +1,38 @@
 # CrewAI - Hermes Plant finance agent
 
-A minimal [CrewAI](https://www.crewai.com/) crew where one analyst agent uses Hermes Plant's DealAnalyzer endpoint to evaluate a deal, then passes the IRR/NPV back to a partner agent who decides whether to proceed.
+A CrewAI example in which an analyst uses Hermes Plant's deterministic
+CashflowLens endpoint, then hands the result to a managing-partner agent.
 
-The point is not this specific scenario. It is the tool-wrapping pattern: a CrewAI `tool` whose `_run` method makes an x402-paid HTTP call, returning structured output the LLM can reason over.
+## Safety contract
+
+- The endpoint price is fixed at **$0.20 USDC per successful call** on Base mainnet.
+- The adapter refuses payments above 200,000 atomic USDC.
+- Calls fail closed unless `HERMES_ALLOW_PAYMENT=1`.
+- The private key is read only from `EVM_PRIVATE_KEY`; never commit it.
+- A Crew may invoke a tool more than once. Set CrewAI iteration limits appropriate
+  to your total spend tolerance; the per-call cap is not a total-run budget.
 
 ## Setup
 
 ```sh
 cd crewai
-python -m venv .venv && source .venv/bin/activate
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+On PowerShell, activate with `.venv\Scripts\Activate.ps1`.
+
+Configure your CrewAI-supported LLM provider, then enable the paid tool explicitly:
+
 ```sh
-export OPENAI_API_KEY="sk-..."          # or another CrewAI-supported LLM provider
-export WALLET_PRIVATE_KEY="0x..."       # Base mainnet EOA
+export OPENAI_API_KEY="..."
+export EVM_PRIVATE_KEY="0x..."
+export HERMES_ALLOW_PAYMENT="1"
 ```
+
+Fund the wallet with enough USDC on Base and a small amount of ETH for gas. Leave
+`HERMES_ALLOW_PAYMENT` unset during import and planning tests.
 
 ## Run
 
@@ -23,10 +40,7 @@ export WALLET_PRIVATE_KEY="0x..."       # Base mainnet EOA
 python finance_agent.py
 ```
 
-## What it shows
-
-- A single CrewAI `Tool` that wraps a Hermes Plant endpoint.
-- One paid call per LLM tool invocation. Cost is bounded by the price tier on the endpoint, not by token count.
-- Deterministic output the LLM can cite by name, such as "IRR was 18.2% per Hermes DealAnalyzer", instead of asking the LLM to guess the math.
-
-For other Hermes endpoints, such as Black-Scholes Greeks, bond analytics, or AML screening, copy `HermesDealAnalyzerTool` and change the endpoint path plus input schema.
+The tool posts the live-verified CashflowLens request shape to
+`/api/agent-services/cashflowlens/analyze`. Copy the adapter pattern only after
+checking the target endpoint's current schema and price. The former
+`HermesDealAnalyzerTool` import remains as a compatibility alias.

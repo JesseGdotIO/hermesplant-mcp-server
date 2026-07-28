@@ -16,14 +16,14 @@ Drop-in MCP server configurations for the runtimes that consume MCP servers nati
 
 ## Free vs paid tools
 
-Some tools (discovery, health, catalog reads) are free. Paid tools (DealAnalyzer, Options, etc.) settle one USDC payment per call. Your wallet authorization model depends on the runtime. Claude Desktop / Cline can pop a confirmation; programmatic runtimes typically use a `WALLET_PRIVATE_KEY` env var.
+Discovery, health, and catalog reads are free. Paid tools return an x402 challenge whose amount varies by endpoint. Do not assume a generic MCP client can authorize that challenge: use a payment-aware runtime or invoke the guarded Python/TypeScript HTTP examples explicitly.
 
 ## Production wallet routing
 
-For autonomous agents that should pay without prompting, run a thin proxy MCP server locally that:
+For an explicitly authorized payment-aware runtime, a local proxy can:
 
 1. Talks to `hermesplant.com/mcp` over Streamable HTTP.
-2. Handles the 402 challenge with its own EOA signer.
+2. Enforces a total spend policy, then handles an approved 402 challenge with its own EOA signer.
 3. Surfaces the verified result back to the model.
 
-Several open-source x402 proxies exist. Search [github.com/x402-foundation/x402](https://github.com/x402-foundation/x402) and the x402 ecosystem page.
+Treat any proxy as wallet infrastructure: verify its exact x402 version, network allowlist, per-call cap, total-run budget, and settlement readback before funding it.

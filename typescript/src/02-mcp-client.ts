@@ -2,11 +2,8 @@
  * 02-mcp-client.ts
  *
  * Connect to Hermes Plant's Streamable HTTP MCP endpoint, list available
- * tools, and call one. MCP handles the protocol envelope; the underlying
- * tool calls still go through x402 for paid endpoints, so your wallet
- * authorizes each paid call.
- *
- *   WALLET_PRIVATE_KEY=0x... npm run example:mcp
+ * tools, and call one free discovery/health/catalog tool. This example does
+ * not configure a wallet and will not invoke a paid tool.
  */
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";

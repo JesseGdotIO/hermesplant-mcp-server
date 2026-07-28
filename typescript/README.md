@@ -1,32 +1,38 @@
 # TypeScript examples
 
-End-to-end TypeScript clients that call Hermes Plant endpoints.
+End-to-end TypeScript clients for Hermes Plant.
 
 | File | What it shows |
 |---|---|
-| [`src/01-call-endpoint.ts`](./src/01-call-endpoint.ts) | Direct x402 call using `@x402/fetch` and `@x402/evm` to handle the 402 challenge automatically. |
-| [`src/02-mcp-client.ts`](./src/02-mcp-client.ts) | Streamable HTTP MCP client that connects to `hermesplant.com/mcp`, lists tools, and invokes one. |
+| [`src/01-call-endpoint.ts`](./src/01-call-endpoint.ts) | A fail-closed x402 2.17 call to the $0.20 CashflowLens endpoint. |
+| [`src/02-mcp-client.ts`](./src/02-mcp-client.ts) | A Streamable HTTP MCP client that lists tools and invokes a free tool. |
 
 ## Setup
 
 ```sh
 cd typescript
-npm install
+npm ci
 ```
 
-Set wallet env:
+## Paid-call safety
+
+The paid quickstart registers only Base mainnet and filters out payment
+requirements above 200,000 atomic USDC. It will not spend until explicitly
+enabled:
 
 ```sh
-export WALLET_PRIVATE_KEY="0x..."   # EOA private key, Base mainnet
+export EVM_PRIVATE_KEY="0x..."
+export HERMES_ALLOW_PAYMENT="1"
 ```
 
-## Run
+Fund the wallet with enough USDC on Base and a small amount of ETH for gas. Never
+commit the private key. Leave `HERMES_ALLOW_PAYMENT` unset for tests.
+
+## Run and verify
 
 ```sh
-npm run example:call         # direct x402 call
-npm run example:mcp          # MCP client
+npm run typecheck
+npm run test:clients
+npm run example:call
+npm run example:mcp
 ```
-
-## Production note
-
-The current TypeScript example uses the x402 v2 client pattern: create an `x402Client`, register an `ExactEvmScheme` for `eip155:8453`, then pass it to `wrapFetchWithPayment(fetch, client)`. Pin package versions in production apps and re-run `npm run typecheck` after SDK upgrades.
