@@ -21,7 +21,7 @@ binds the result to that unchanged action, and escalates high or critical risk
 only when the additional $0.25 is authorized. Review triage is never treated as
 human approval and the skill never expands the caller's permissions.
 
-Source: [`skills/protect-agent-action`](./skills/protect-agent-action)
+Source: [`skills/protect-agent-action`](./skills/protect-agent-action) · [Install guide and trust boundary](https://hermesplant.com/skills/action-safety?utm_source=github-skill-repo&utm_medium=repository&utm_campaign=action-safety-skill-launch&utm_content=protect-agent-action)
 
 ## Use the hosted MCP connector
 
