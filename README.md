@@ -56,9 +56,9 @@ These links describe functional complementarity, not partnerships or endorsement
 
 | Workflow | Use it for | Tracked entrypoint |
 |---|---|---|
-| **Action Safety** | Preflight shell, Git, SQL, deploy, x402, and MCP actions; escalate high-risk work into review plus a signed receipt. | [Open workflow](https://hermesplant.com/agent-services/action-safety-workflow?utm_source=glama&utm_medium=registry&utm_campaign=biweekly-registry-wave&utm_content=action-safety-workflow) |
-| **Spend Assurance** | Check payment policy, wallet context, and evidence before an agent spends. | [Open workflow](https://hermesplant.com/agent-services/spend-assurance?utm_source=glama&utm_medium=registry&utm_campaign=biweekly-registry-wave&utm_content=spend-assurance-workflow) |
-| **Investment Evidence** | Run deterministic underwriting and return verifiable evidence in one paid call. | [Open workflow](https://hermesplant.com/agent-services/investment-evidence?utm_source=glama&utm_medium=registry&utm_campaign=biweekly-registry-wave&utm_content=investment-evidence-workflow) |
+| **Action Safety** | Preflight shell, Git, SQL, deploy, x402, and MCP actions; escalate high-risk work into review plus a signed receipt. | [Open workflow](https://hermesplant.com/agent-services/action-safety-workflow?utm_source=github-mcp-repo&utm_medium=repository&utm_campaign=biweekly-registry-wave&utm_content=action-safety-workflow) |
+| **Spend Assurance** | Check payment policy, wallet context, and evidence before an agent spends. | [Open workflow](https://hermesplant.com/agent-services/spend-assurance?utm_source=github-mcp-repo&utm_medium=repository&utm_campaign=biweekly-registry-wave&utm_content=spend-assurance-workflow) |
+| **Investment Evidence** | Run deterministic underwriting and return verifiable evidence in one paid call. | [Open workflow](https://hermesplant.com/agent-services/investment-evidence?utm_source=github-mcp-repo&utm_medium=repository&utm_campaign=biweekly-registry-wave&utm_content=investment-evidence-workflow) |
 
 Use the free API key for up to 250 calls/month, the **$29/month Agent API Pass** for regular volume, or per-call USDC on Base. Public proof and machine-readable contracts are available at [hermesplant.com/proof](https://hermesplant.com/proof) and [hermesplant.com/openapi.json](https://hermesplant.com/openapi.json).
 
@@ -82,7 +82,7 @@ Nineteen hosted x402 endpoints remain available as composable utilities:
 | **Payment policy** | Inspect/score an x402 payment policy | [/agent-services/payment-policy](https://hermesplant.com/agent-services/payment-policy) |
 | **ReviewQueue** | Human-in-the-loop approval routing | [/agent-services/reviewqueue](https://hermesplant.com/agent-services/reviewqueue) |
 
-Agents discover endpoints through OpenAPI, llms.txt, the x402 manifest, the API catalog, MCP metadata, or agent skills. The workflow links above carry source-specific attribution so registry traffic can be evaluated against paid calls instead of impressions.
+Agents discover endpoints through OpenAPI, llms.txt, the x402 manifest, the API catalog, MCP metadata, or agent skills. The workflow links above identify this GitHub repository as their source; actual Glama placements use separate registry tags. Source tags are observational and do not establish buyer identity or a completed purchase.
 
 ## How an x402 call works
 
