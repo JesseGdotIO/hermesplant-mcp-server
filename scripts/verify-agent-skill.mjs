@@ -33,6 +33,12 @@ assert.match(skill, /fail closed/i);
 assert.match(skill, /\[references\/contract\.md\]\(references\/contract\.md\)/);
 assert.doesNotMatch(skill, /JesseGdotIO\/HermesPlant/);
 
+assert.match(skill, /initial request, any authorized paid retry, and the Quick-to-Run/);
+assert.match(contract, /x-hermes-channel: github-skill-repo/);
+assert.match(contract, /x-hermes-medium: repository/);
+assert.match(contract, /x-hermes-campaign: first-workflow/);
+assert.match(contract, /x-hermes-content: protect-agent-action/);
+assert.match(contract, /x-hermes-probe: 1/);
 assert.match(contract, /hermes-action-v1/);
 assert.match(contract, /PaymentRequired/);
 assert.match(contract, /payment signature/i);

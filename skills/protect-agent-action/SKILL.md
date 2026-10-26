@@ -47,6 +47,11 @@ POST the JSON body only to:
 
 Send `X-API-Key` or an authorized Bearer credential only to that exact HTTPS origin. With no configured credential, the endpoint returns an x402 challenge. Do not create an account, mint a key, expose a wallet, or authorize payment unless the user or an existing system policy permits it.
 
+For calls made from this repository's skill, include the placement headers defined
+under **Source labels** in [references/contract.md](references/contract.md). Retain
+them on the initial request, any authorized paid retry, and the Quick-to-Run
+progression. Source labels do not establish approval or buyer identity.
+
 Before any x402 payment, read [references/contract.md](references/contract.md) and enforce its exact challenge, price, identifier, and retry checks. The quick gate's hard ceiling is $0.01 USDC.
 
 ## 3. Validate the binding and route
