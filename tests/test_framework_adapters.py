@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import importlib.util
+from types import SimpleNamespace
 import os
 from pathlib import Path
 import sys
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -112,6 +113,52 @@ class FrameworkAdapterContractTests(unittest.TestCase):
                         "periodsPerYear": 12,
                     },
                 )
+
+    def test_source_labels_survive_sdk_payment_retry(self):
+        import requests
+        from requests.adapters import HTTPAdapter
+        from x402 import x402ClientSync
+        from x402.http.clients import x402_requests
+
+        for name, module in self.modules.items():
+            with self.subTest(name=name):
+                client = x402ClientSync()
+                client.create_payment_payload = Mock(return_value=object())
+                session = x402_requests(client)
+                adapter = session.get_adapter(module.CASHFLOW_LENS_URL)
+                http = adapter._http_client
+                captured = []
+
+                def transport(request, **kwargs):
+                    captured.append(request.copy())
+                    response = requests.Response()
+                    response.status_code = 402 if len(captured) == 1 else 200
+                    response._content = b'{"ok": true}'
+                    response.request = request
+                    return response
+
+                # Mock the payment contract/signature; exercise the real requests adapter.
+                with patch.object(module, "_paid_session", return_value=session), \
+                     patch.object(HTTPAdapter, "send", side_effect=transport), \
+                     patch.object(http, "get_payment_required_response", return_value=object()), \
+                     patch.object(http, "handle_payment_required", return_value=None), \
+                     patch.object(http, "encode_payment_signature_header", return_value={"PAYMENT-SIGNATURE": "mock-no-wallet"}), \
+                     patch.object(http, "process_payment_result", return_value=SimpleNamespace(recovered=False)):
+                    if name == "python":
+                        module.call_cashflow_lens([-100, 120])
+                    else:
+                        tool = module.HermesCashflowLens if name == "langchain" else module.HermesCashflowLensTool
+                        tool()._run([-100, 120])
+
+                self.assertEqual(len(captured), 2)
+                for request in captured:
+                    self.assertEqual(request.headers["x-hermes-channel"], "github-mcp-repo")
+                    self.assertEqual(request.headers["x-hermes-medium"], "repository")
+                    self.assertEqual(request.headers["x-hermes-campaign"], "first-workflow")
+                    self.assertEqual(request.headers["x-hermes-content"], f"{name}-cashflowlens")
+                self.assertNotIn("PAYMENT-SIGNATURE", captured[0].headers)
+                self.assertEqual(captured[1].headers["PAYMENT-SIGNATURE"], "mock-no-wallet")
+                self.assertEqual(captured[0].body, captured[1].body)
 
     def test_spend_cap_and_network_are_explicit(self):
         for name, module in self.modules.items():

@@ -7,6 +7,23 @@ Runnable MCP server and integration examples for [Hermes Plant](https://hermespl
 
 **What's here**: a runnable stdio MCP bridge for registry crawlers and local clients, plus drop-in examples in `curl`, TypeScript, Python, [CrewAI](https://www.crewai.com/), [LangChain](https://www.langchain.com/), and MCP client configs for Claude Desktop / Cline / Cursor.
 
+## Review one workflow before launch
+
+An agent receives approval for one action, its arguments change, and a retry after
+a timeout may execute it twice. What binds approval to the final action, prevents
+duplicates, and proves whether execution completed?
+
+The [sample findings memo](https://hermesplant.com/examples/workflow-review-sample.md)
+walks through a synthetic example of these gaps, the available evidence, and a
+ranked fix plan. It is a demonstration, not a client result.
+
+For technical founders and automation agencies with a working or near-launch
+agent, the [$300 workflow review](https://hermesplant.com/workflow-review?utm_source=github-mcp-repo&utm_medium=repository&utm_campaign=workflow-review-20261026&utm_content=readme-workflow-review)
+covers one workflow, a workflow map, ranked findings, and a practical fix plan.
+The three-hour cap includes calls, preparation, the memo, and one clarification
+round. We agree scope and timing in writing before billing. Implementation and
+production access require a separate agreement.
+
 ## Install the Action Safety skill
 
 Install the public, fail-closed Action Safety skill for Codex, Claude Code,
@@ -169,6 +186,19 @@ docker run --rm -i hermesplant-mcp-server
 ```
 
 The container starts the stdio MCP bridge in [mcp-server/](./mcp-server/), which exposes Hermes Plant discovery tools and hosted MCP metadata without requiring API keys.
+
+### Example source labels
+
+The curl, TypeScript, Python, CrewAI, and LangChain CashflowLens examples send
+`x-hermes-channel: github-mcp-repo`, `x-hermes-medium: repository`, and
+`x-hermes-campaign: first-workflow`. `x-hermes-content` identifies the runtime.
+The paid clients pass these headers into the x402 request so the SDK retains them
+when retrying after a 402 challenge. Curl only inspects the unpaid challenge.
+
+If you publish an example in another placement, replace these labels with that
+placement's source and campaign. Labels are caller-declared observations; they
+do not verify buyer identity, revenue, or an unaffiliated customer. Owner QA must
+also send `x-hermes-probe: 1` so it is excluded from acquisition reporting.
 
 ## Wallet setup
 

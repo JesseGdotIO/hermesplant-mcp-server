@@ -22,6 +22,13 @@ from x402.mechanisms.evm.exact.register import register_exact_evm_client
 CASHFLOW_LENS_URL = "https://hermesplant.com/api/agent-services/cashflowlens/analyze"
 CASHFLOW_LENS_PRICE_ATOMIC_USDC = 200_000
 BASE_MAINNET = "eip155:8453"
+# Placement labels describe this example, not the caller's identity.
+SOURCE_HEADERS = {
+    "x-hermes-channel": "github-mcp-repo",
+    "x-hermes-medium": "repository",
+    "x-hermes-campaign": "first-workflow",
+    "x-hermes-content": "crewai-cashflowlens",
+}
 
 
 class CashflowLensInput(BaseModel):
@@ -72,6 +79,7 @@ class HermesCashflowLensTool(BaseTool):
         with _paid_session() as session:
             response = session.post(
                 CASHFLOW_LENS_URL,
+                headers=SOURCE_HEADERS,
                 json={
                     "cashflows": cashflows,
                     "discountRate": discount_rate,

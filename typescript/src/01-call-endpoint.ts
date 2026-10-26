@@ -14,6 +14,13 @@ export const CASHFLOW_LENS_PATH = "/api/agent-services/cashflowlens/analyze";
 export const CASHFLOW_LENS_URL = `${BASE_URL}${CASHFLOW_LENS_PATH}`;
 export const CASHFLOW_LENS_PRICE_ATOMIC_USDC = 200_000n;
 export const BASE_MAINNET = "eip155:8453" as const;
+// Placement labels describe this example, not the caller's identity.
+export const SOURCE_HEADERS = {
+  "x-hermes-channel": "github-mcp-repo",
+  "x-hermes-medium": "repository",
+  "x-hermes-campaign": "first-workflow",
+  "x-hermes-content": "typescript-cashflowlens",
+} as const;
 
 export function buildPaidFetch(env: NodeJS.ProcessEnv = process.env): typeof fetch {
   if (env.HERMES_ALLOW_PAYMENT !== "1") {
@@ -44,7 +51,7 @@ export function buildPaidFetch(env: NodeJS.ProcessEnv = process.env): typeof fet
 export async function callCashflowLens(fetchImpl: typeof fetch = buildPaidFetch()) {
   const response = await fetchImpl(CASHFLOW_LENS_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...SOURCE_HEADERS },
     body: JSON.stringify({
       cashflows: [-1_000_000, 250_000, 250_000, 300_000, 400_000],
       discountRate: 0.1,
