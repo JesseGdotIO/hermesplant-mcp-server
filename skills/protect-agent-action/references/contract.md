@@ -41,6 +41,28 @@ Use an already configured access mode only:
 
 Do not silently mint a free key, open an account, reveal a wallet, or convert an authentication failure into paid execution.
 
+## Source labels
+
+When this repository's skill is the placement that led to the call, send:
+
+```text
+x-hermes-channel: github-skill-repo
+x-hermes-medium: repository
+x-hermes-campaign: first-workflow
+x-hermes-content: protect-agent-action
+```
+
+Use the same labels on the unpaid request and its authorized payment retry, and
+retain them if an authorized Quick call progresses to Run. They are HTTP headers,
+not action fields, approval evidence, or payment-identifier values. They must not
+change the action body, binding, payment identifier, price, or permission checks.
+
+Preserve a caller's more specific, known acquisition source instead of overwriting
+it with these defaults. If this skill is republished elsewhere, replace the labels
+with that placement's source. These are caller-declared observations, not proof of
+identity, independent use, or verified revenue. Owner tests also send
+`x-hermes-probe: 1` so they are excluded from acquisition reporting.
+
 ## x402 acceptance checks
 
 Before signing, select exactly one acceptance option and require all of the following:
