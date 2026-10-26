@@ -29,6 +29,10 @@ echo "## Unpaid POST returns the x402 challenge"
 STATUS=$(curl -sS -D "$HEADERS" -o "$BODY" -w "%{http_code}" \
   -X POST "$BASE$ENDPOINT" \
   -H 'Content-Type: application/json' \
+  -H 'x-hermes-channel: github-mcp-repo' \
+  -H 'x-hermes-medium: repository' \
+  -H 'x-hermes-campaign: first-workflow' \
+  -H 'x-hermes-content: curl-cashflowlens' \
   -d "$PAYLOAD")
 
 echo "HTTP $STATUS"
